@@ -13,10 +13,16 @@
 // Example 4:
 // Access the original array as third argument
 
-  function forEach(array, callback){
+  function forEach(array, callback, optionalThisObject){
+    let forEachCallback = callback;
+
+    if (optionalThisObject) {
+      forEachCallback = callback.bind(optionalThisObject);
+    };
+
     for (let i = 0; i < array.length; i++){
-      callback(array[i], i, array);
-    }
+      forEachCallback(array[i], i, array);
+    };
   };
 
   
@@ -26,11 +32,11 @@
     'It should run the callback function array.length times.': function () {
 
       let array = [1,2,3];
-      let counter = 0;
+      let numberOfTimesCallbackHasRun = 0;
 
-      forEach(array, () => { counter++ });
+      forEach(array, () => { numberOfTimesCallbackHasRun++ });
 
-      eq(counter, 3);
+      eq(numberOfTimesCallbackHasRun, 3);
     },
 
     'It should pass in the ith element as the first argument to the callback function.': function () {
@@ -52,6 +58,16 @@
       let array = [1];
 
       forEach(array, (number, index, originalArray) => { eq(originalArray, array) });
+    },
+
+    'It should accept an optional this object.': function () {
+      
+      let array = [1];
+
+      forEach(array, function () { 
+        eq(this.description, 'I should be accessible inside of the callback.'); 
+      }, {description: 'I should be accessible inside of the callback.'});
+
     }
 
   });

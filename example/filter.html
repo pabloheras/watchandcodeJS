@@ -1,0 +1,113 @@
+<script src="../tinytest.js"></script>
+<script>
+
+// Example 1:
+// filter([1,2,3], function () {});
+
+// Example 2:
+// filter([1,2,3], function (element){
+//  console.log(element);    
+// });
+
+// Example 3:
+// filter([1,2,3], function (element, index){
+//  console.log(index);    
+// });
+
+// Example 4:
+// filter([1,2,3], function (element, index, originalArray){
+//  console.log(originialArray);    
+// });
+
+// Example 5:
+// filter([1,2,3], function (){
+//    console.log(this.name);
+// }, this);
+
+// Example 6:
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function () {});
+// testArray !== filteredArray;
+
+// Example 7:
+// var testArray = [1,2,3];
+// var filteredArray = filter(testArray, function (element) {
+//  return element > 1;
+// });
+// Expect filteredArray to be [2,3]
+
+  function filter(array, callback, newThis){
+    
+    let completeCallback = callback; 
+    let filteredArray = [];
+
+    if (newThis){
+        completeCallback = callback.bind(newThis);   
+    }
+
+    for (let i = 0; i < array.length; i++){
+        if (completeCallback(array[i], i, array))
+            filteredArray.push(array[i]);
+    }
+
+    return filteredArray;
+  };
+
+  
+
+  tests({
+
+    'It should run the callback function array.length times.': function () {
+
+        let numberOfTimesCallbackHasRun = 0;
+
+        filter([1,2,3], () => { numberOfTimesCallbackHasRun++ });
+
+        eq(numberOfTimesCallbackHasRun, 3);
+    },
+
+    'It should pass in the ith element as the first argument to the callback function.': function () {
+        
+        filter([1], (element) => { eq(element, 1) });
+    },
+
+    'It should optionally pass in the ith position as the second argument to the callback function.': function () {
+        
+        filter([1], (element, position) => { eq(position, 0) });
+    },
+
+    'It should optionally pass in the original array as the third argument to the callback function.': function () {
+        
+        let array = [1,2,3];
+
+        filter(array, (element, position, originalArray) => { eq(originalArray, array) });
+    },
+
+    'It should acept an optional this object.': function () {
+
+        filter([1,2,3], function() { 
+            eq(this.description, 'This should appear inside the callback function.');
+        }, {description: 'This should appear inside the callback function.'});
+    },
+
+    'It should return a new array different than the originalArray.': function () {
+
+        let array = [1];
+        let filteredArray = filter(array, function() {});
+        
+        //Check filteredArray is actually an Array
+        eq(Array.isArray(filteredArray), true);
+        //Check filteredArray is not equal to array
+        eq(filteredArray !== array, true);
+    },
+
+    'It should return a new array filtered by the condition (when true) given in the callback function.': function () {
+        
+        let filteredArray = filter([1,2], (element) => { return element > 1; });
+       
+        eq(filteredArray.length, 1);
+        eq(filteredArray[0], 2);
+    }
+
+  });
+</script>

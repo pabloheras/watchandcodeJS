@@ -1,0 +1,74 @@
+<script src="../tinytest.js"></script>
+<script>
+
+// Example 1:
+// forEach element in an array it should run the callback function array.length times
+
+// Example 2:
+// forEach element in an array it should pass in the ith element as the first argument to the callback function array.length times
+
+// Example 3:
+// The index of the current element being processed in the array
+
+// Example 4:
+// Access the original array as third argument
+
+  function forEach(array, callback, optionalThisObject){
+    let forEachCallback = callback;
+
+    if (optionalThisObject) {
+      forEachCallback = callback.bind(optionalThisObject);
+    };
+
+    for (let i = 0; i < array.length; i++){
+      forEachCallback(array[i], i, array);
+    };
+  };
+
+  
+
+  tests({
+
+    'It should run the callback function array.length times.': function () {
+
+      let array = [1,2,3];
+      let numberOfTimesCallbackHasRun = 0;
+
+      forEach(array, () => { numberOfTimesCallbackHasRun++ });
+
+      eq(numberOfTimesCallbackHasRun, 3);
+    },
+
+    'It should pass in the ith element as the first argument to the callback function.': function () {
+      
+      let array = [1];
+
+      forEach(array, element => { eq(element, 1) });
+    },
+
+    'It should pass in the ith position as the second argument to the callback.': function () {
+      
+      let array = [1];
+
+      forEach(array, (number, index) => { eq(index, 0) });
+    },
+
+    'It should pass in the original array as the third argument to the callback.': function () {
+
+      let array = [1];
+
+      forEach(array, (number, index, originalArray) => { eq(originalArray, array) });
+    },
+
+    'It should accept an optional this object.': function () {
+      
+      let array = [1];
+
+      forEach(array, function () { 
+        eq(this.description, 'I should be accessible inside of the callback.'); 
+      }, {description: 'I should be accessible inside of the callback.'});
+
+    }
+
+  });
+</script>

@@ -1,0 +1,128 @@
+<script src="../tinytest.js"></script>
+<script>
+
+// Example 1:
+// reduce([1,2,3], function () {});
+
+// Example 2:
+// reduce([1,2,3], function (previousElement){
+//  console.log(previousElement);    
+// });
+
+// Example 3:
+// reduce([1,2,3], function (previousElement, currentElement){
+//  console.log(currentElement);    
+// });
+
+// Example 4:
+// reduce([1,2,3], function (previousElement, currentElement, currentIndex){
+//  console.log(currentIndex);    
+// });
+
+// Example 5:
+// reduce([1,2,3], function (previousElement, currentElement, currentIndex, array){
+//  console.log(array);    
+// });
+
+// Example 6:
+// reduce([1,2,3], function (){
+//    console.log(initialElement);
+// }, initialElement);
+
+// Example 7:
+// let array = [1,2,3];
+// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {});
+// reducedElement === true;
+
+// Example 8:
+// let array = [1,2,3];
+// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
+//  return previousElement + currentElement;
+// });
+// Expect reducedElement to be 6
+
+// Example 9:
+// let array = [,2,3];
+// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
+//  return previousElement + currentElement;
+// });
+// Expect reducedElement to be 5
+
+// Example 10:
+// let array = [1,2,3];
+// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
+//   console.log(previousElement); 
+//   console.log(currentElement); 
+// }, 10);
+// Expect previousElement to be 10 && currentElement to be 1
+
+// Example 11:
+// let array = [1,2,3];
+// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
+//   console.log(previousElement); 
+//   console.log(currentElement); 
+// });
+// Expect previousElement to be 1 && currentElement to be 2
+
+// Edge cases
+
+// Example 12:
+// let weirdArray = [];
+// let reducedElement = reduce(array, function () {}, 10);
+// Expect reducedElement to be 10
+
+// Example 13:
+// let weirdArray = [];
+// let reducedElement = reduce(array, function () {});
+// Expect reducedElement to be TypeError
+
+// Example 14:
+// let weirdArray = [1];
+// let reducedElement = reduce(array, function () {});
+// Expect reducedElement to be 10
+
+//  If array.length === 0 && initialElement then return initialElement
+
+//  If array.length === 0 && !initialElement then TypeError
+//  If array.length === 1 && !initialElement then return array[onlyElement]
+
+  function reduce () {
+
+  }; 
+
+  tests({
+
+    '': function () {
+    
+    },
+
+    '': function () {
+    
+    },
+
+    '': function () {
+    
+    },
+
+    '': function () {
+    
+    },
+
+    '': function () {
+    
+    },
+
+    '': function () {
+    
+    },
+
+    '': function () {
+    
+    },
+
+    '': function () {
+
+    }
+
+  });
+</script>

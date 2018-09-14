@@ -1,127 +1,172 @@
 <script src="../tinytest.js"></script>
 <script>
 
-// Example 1:
-// reduce([1,2,3], function () {});
+// Function signature:
+  // reduce(array, callback[, initialValue])
 
-// Example 2:
-// reduce([1,2,3], function (previousElement){
-//  console.log(previousElement);    
-// });
+// Callback parameters:
+  // previousValue
+  // currentValue
+  // currentIndex
+  // array
+  
+// Return value:
+  // Returns a single value
 
-// Example 3:
-// reduce([1,2,3], function (previousElement, currentElement){
-//  console.log(currentElement);    
-// });
+// Requirements:
 
-// Example 4:
-// reduce([1,2,3], function (previousElement, currentElement, currentIndex){
-//  console.log(currentIndex);    
-// });
+// If initialValue then it should start previousValue = initialValue
+// If initialValue then it should start currentValue = array[0]
+// If initialValue then it should start currentIndex = 0
 
-// Example 5:
-// reduce([1,2,3], function (previousElement, currentElement, currentIndex, array){
-//  console.log(array);    
-// });
+// If !initialValue then it should start previousValue = array[0]
+// If !initialValue then it should start currentValue = array[1]
+// If !initialValue then it should start currentIndex = 1
 
-// Example 6:
-// reduce([1,2,3], function (){
-//    console.log(initialElement);
-// }, initialElement);
+// If initialValue && array.length === 0 then it should return initialValue without calling callback
+// If !initialValue && array.length === 1 then it should return that only element without calling callback
 
-// Example 7:
-// let array = [1,2,3];
-// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {});
-// reducedElement === true;
+// It should actually reduce
+// It should exclude holes in the array
+// If array.length === 0 && !initialValue then it should throw TypeError
+// It should pass array as fourth argument to callback
 
-// Example 8:
-// let array = [1,2,3];
-// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
-//  return previousElement + currentElement;
-// });
-// Expect reducedElement to be 6
+  function reduce (array, callback, initialValue) {
+    let startingIndex = 0;
+    let resultSoFar = initialValue;
+    let lengthOfArray = array.length;
+    
+    // No initialValue.
+    if(arguments.length < 3){
+      // If array is empty, throws TypeError.
+      if (Object.keys(array).length === 0){
+        throw new TypeError('Reduce of empty array with no initial value.');
+      }
+      // If array has one element, just return it.
+      if (Object.keys(array).length === 1){
+        return array[Object.keys(array)[0]];
+      }
+      // While there are holes at the beginning of the array, skip them.
+      while (startingIndex in array === false && startingIndex < lengthOfArray) {
+        startingIndex++;
+      }
+      // Sets the initial previousValue to an element before the currentIndex.
+      resultSoFar = array[startingIndex];
+      startingIndex++;
 
-// Example 9:
-// let array = [,2,3];
-// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
-//  return previousElement + currentElement;
-// });
-// Expect reducedElement to be 5
-
-// Example 10:
-// let array = [1,2,3];
-// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
-//   console.log(previousElement); 
-//   console.log(currentElement); 
-// }, 10);
-// Expect previousElement to be 10 && currentElement to be 1
-
-// Example 11:
-// let array = [1,2,3];
-// let reducedElement = reduce(array, function (previousElement, currentElement, currentIndex, array) {
-//   console.log(previousElement); 
-//   console.log(currentElement); 
-// });
-// Expect previousElement to be 1 && currentElement to be 2
-
-// Edge cases
-
-// Example 12:
-// let weirdArray = [];
-// let reducedElement = reduce(array, function () {}, 10);
-// Expect reducedElement to be 10
-
-// Example 13:
-// let weirdArray = [];
-// let reducedElement = reduce(array, function () {});
-// Expect reducedElement to be TypeError
-
-// Example 14:
-// let weirdArray = [1];
-// let reducedElement = reduce(array, function () {});
-// Expect reducedElement to be 10
-
-//  If array.length === 0 && initialElement then return initialElement
-
-//  If array.length === 0 && !initialElement then TypeError
-//  If array.length === 1 && !initialElement then return array[onlyElement]
-
-  function reduce () {
-
+    // initialValue.
+    } else {
+      // If array is empty, just return initialValue.
+      if(Object.keys(array).length === 0){
+        return initialValue;
+      }
+    }
+    // The predefined variable lengthOfArray allows to fix that length in case the callback function
+    // modifies the actual length of the array passed to it, preventing possible infinite loops.
+    for (let i = startingIndex; i < lengthOfArray; i++){
+      if(i in array){
+        resultSoFar = callback(resultSoFar, array[i], i, array);
+      }
+    }
+    
+    return resultSoFar;
   }; 
 
   tests({
+    'If initialValue then it should run the callback function array.length times.': function () {
+      let timesCallbackRun = 0;
+      
+      reduce([1,2,3], () => { timesCallbackRun++ }, 10);
 
-    '': function () {
-    
+      eq(timesCallbackRun, 3);
     },
 
-    '': function () {
-    
+    'If !initialValue then it should run the callback function array.length - 1 times.': function () {
+      let timesCallbackRun = 0;
+      
+      reduce([1,2,3], () => { timesCallbackRun++ });
+
+      eq(timesCallbackRun, 2);
     },
 
-    '': function () {
-    
+
+    'If initialValue then it should start previousValue = initialValue.': function () {
+      reduce([1], (previousValue) => { eq(previousValue, 10) }, 10);
     },
 
-    '': function () {
-    
+    'If initialValue then it should start currentValue = array[0].': function () {
+      reduce([1], (previousValue, currentValue) => { eq(currentValue, 1) }, 10);
     },
 
-    '': function () {
-    
+    'If initialValue then it should start currentIndex = 0.': function () {
+      reduce([1], (previousValue, currentValue, currentIndex) => { eq(currentIndex, 0) }, 10);
     },
 
-    '': function () {
-    
+
+    'If !initialValue then it should start previousValue = array[0].': function () {
+      reduce([1,2], (previousValue) => { eq(previousValue, 1) });
     },
 
-    '': function () {
-    
+    'If !initialValue then it should start currentValue = array[1].': function () {
+      reduce([1,2], (previousValue, currentValue) => { eq(currentValue, 2) });
     },
 
-    '': function () {
+    'If !initialValue then it should start currentIndex = 1.': function () {
+      reduce([1,2], (previousValue, currentValue, currentIndex) => { eq(currentIndex, 1) });
+    },
 
+
+    'If initialValue && array.length === 0 then it should return initialValue without calling callback.': 
+      function () {
+        let timesCallbackRun = 0;
+        let reduceResult = reduce([,,], () => { timesCallbackRun++ }, 10);
+        eq(reduceResult, 10);
+        eq(timesCallbackRun, 0);
+    },
+
+    'If !initialValue && array.length === 1 then it should return that only element without calling callback.': 
+      function () {
+        let timesCallbackRun = 0;
+        let reduceResult = reduce([,,1], () => { timesCallbackRun++ });
+        eq(reduceResult, 1);
+        eq(timesCallbackRun, 0);
+      },
+    
+
+    'It should actually reduce.': function () {
+      let reduceResult = reduce([1,2,3], (previousValue, currentValue) => { 
+          return previousValue + currentValue; 
+        }, 0);
+      eq(reduceResult, 6);
+    },
+
+    'If initialVaue then it should exclude holes in the array.': function () {
+      let reduceResult = reduce([,1,,2,3,], (previousValue, currentValue) => { 
+          return previousValue + currentValue; 
+        }, 0);
+      eq(reduceResult, 6);
+    },
+
+    'If !initialValue then it should exclude holes in the array too.': function () {
+      let reduceResult = reduce([,1,,2,3,], (previousValue, currentValue) => { 
+          return previousValue + currentValue; 
+        });
+      eq(reduceResult, 6);
+    },
+    
+    'If array.length === 0 && !initialValue then it should throw TypeError.': function () {
+      let isTypeError = false;
+      try{
+        reduce([], () => {});
+      } catch(e) {
+        isTypeError = (e instanceof TypeError);
+      }
+      eq(isTypeError, true);
+    },
+
+    'It should pass array as fourth argument to callback.': function () {
+      let testArray = [1,2,3];
+      reduce(testArray, (previousValue, currentValue, currentIndex, array) => { eq(array, testArray) });
     }
 
   });

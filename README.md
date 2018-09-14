@@ -1,3 +1,13 @@
+Small exercise using tinytest library for unit testing.
+
+Methods developed:
+* Array.prototype.filter()
+* Array.prototype.forEach()
+* Array.prototype.map()
+* Array.prototype.reduce()
+
+=======================================
+
 Tiniest JavaScript unit testing library
 =======================================
 

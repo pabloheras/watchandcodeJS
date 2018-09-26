@@ -1,10 +1,10 @@
 Small exercise using tinytest library for unit testing.
 
 Methods developed:
-* Array.prototype.filter()
-* Array.prototype.forEach()
-* Array.prototype.map()
-* Array.prototype.reduce()
+* [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+* [Array.prototype.forEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
+* [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+* [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Referencia/Objetos_globales/Array/reduce)
 
 =======================================
 
